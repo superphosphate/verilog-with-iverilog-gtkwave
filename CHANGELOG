@@ -1,0 +1,20 @@
+# CHANGELOG
+
+All notable changes to this project will be documented in this file.
+
+Versions below are created in early development.
+
+## [v0.1.1] - 2025-05-23
+### Added
+- Advanced Iverilog and GTKwave support
+- Compile in built-in terminal
+- Output path now supports relative path
+
+### Fixed
+- Improved compilation workflow
+
+## [v0.1.0] - 2024-05-22
+### Added
+- First version release
+- Basic support for Iverilog and GTKwave
+- Initial Verilog compilation features

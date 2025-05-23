@@ -1,0 +1,128 @@
+{
+  "name": "verilog-with-iverilog-gtkwave",
+  "displayName": "Verilog with Iverilog and GTKWave",
+  "description": "A Visual Studio Code extension for compiling Verilog modules with Iverilog and simulating results with GTKWave.",
+  "version": "0.1.1",
+  "publisher": "SuperPhosphate",
+  "icon": "image/icon.png",
+  "engines": {
+    "vscode": "^1.50.0"
+  },
+  "activationEvents": [
+    "onCommand:vscode-iverilog-gtkwave.compile",
+    "onCommand:vscode-iverilog-gtkwave.simulate",
+    "onLanguage:verilog"
+  ],
+  "main": "./dist/extension.js",
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./tsconfig.json",
+    "test": "code .",
+    "prepack": "vsce package"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "vscode-iverilog-gtkwave.compile",
+        "title": "Compile Verilog Module",
+        "title.zh-cn": "编译 Verilog 模块",
+        "icon": "$(play)"
+      },
+      {
+        "command": "vscode-iverilog-gtkwave.simulate",
+        "title": "Simulate with GTKWave",
+        "title.zh-cn": "使用 GTKWave 模拟",
+        "icon": "$(debug)"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "when": "resourceLangId == verilog || resourceExtname == .v || resourceExtname == .vh",
+          "command": "vscode-iverilog-gtkwave.compile",
+          "group": "navigation"
+        },
+        {
+          "when": "resourceLangId == verilog || resourceExtname == .v || resourceExtname == .vh",
+          "command": "vscode-iverilog-gtkwave.simulate",
+          "group": "navigation"
+        }
+      ]
+    },
+    "languages": [
+      {
+        "id": "verilog",
+        "extensions": [
+          ".v",
+          ".vh"
+        ],
+        "aliases": [
+          "Verilog",
+          "verilog"
+        ]
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Iverilog and GTKWave Configuration",
+      "title.zh-cn": "Iverilog 和 GTKWave 配置",
+      "properties": {
+        "iverilog.path": {
+          "type": "string",
+          "default": "/usr/bin/iverilog",
+          "description": "Path to the Iverilog executable.",
+          "description.zh-cn": "Iverilog 可执行文件的路径。"
+        },
+        "gtkwave.path": {
+          "type": "string",
+          "default": "/usr/bin/gtkwave",
+          "description": "Path to the GTKWave executable.",
+          "description.zh-cn": "GTKWave 可执行文件的路径。"
+        },
+        "iverilog.outputDirectory": {
+          "type": "string",
+          "default": "",
+          "description": "Directory to store compiled output files. Supports relative paths (e.g., './output', '../build'). Leave empty to use the same directory as the source file.",
+          "description.zh-cn": "存储编译输出文件的目录。支持相对路径（如 './output'、'../build'）。留空则使用源文件所在的目录。"
+        },
+        "iverilog.language": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "en",
+            "zh-cn"
+          ],
+          "enumDescriptions": [
+            "Follow VS Code language setting",
+            "English",
+            "简体中文"
+          ],
+          "default": "auto",
+          "description": "Language setting for UI and messages.",
+          "description.zh-cn": "界面和消息的语言设置。"
+        },
+        "iverilog.useTerminal": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use integrated terminal to run iverilog and vvp commands.",
+          "description.zh-cn": "使用集成终端运行 iverilog 和 vvp 命令。"
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "ts-loader": "^8.0.0",
+    "typescript": "^4.0.0",
+    "vsce": "^2.15.0",
+    "vscode": "^1.1.37",
+    "@types/glob": "^7.1.3"
+  },
+  "dependencies": {
+    "glob": "^7.1.6"
+  },
+  "keywords": [
+    "verilog"
+  ],
+  "author": "SuperPhosphate",
+  "license": "LGPL-3.0-or-later"
+}
