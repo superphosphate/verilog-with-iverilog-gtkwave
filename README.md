@@ -8,7 +8,7 @@ This project is a Visual Studio Code extension that allows users to easily compi
 
 ### Features
 
-[Change log](CHANGELOG)
+[Change log](CHANGELOG.md)
 
 - **One-click compilation**: Compile Verilog modules directly from the editor title bar
 - **Directory-wide compilation**: Automatically compiles all Verilog files in the same directory
