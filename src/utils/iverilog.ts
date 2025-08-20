@@ -33,7 +33,7 @@ async function getAllVerilogFiles(directory: string): Promise<string[]> {
     }
 }
 
-export async function runIverilog(mainFile: string, outputFile: string, compileAllInDirectory: boolean = true, useTerminal: boolean = false): Promise<string> {
+export async function runIverilog(mainFile: string, outputFile: string, compileAllInDirectory: boolean = true, useTerminal: boolean = true): Promise<string> {
     const config = vscode.workspace.getConfiguration();
     const iverilogPath = config.get('iverilog.path', 'iverilog');
     
@@ -70,28 +70,23 @@ export async function runIverilog(mainFile: string, outputFile: string, compileA
         sourceFiles = [...fileSet];
     }
     
-    const command = `${iverilogPath} -o ${outputFile} ${sourceFiles.join(' ')}`;
+    // 对文件路径加引号以处理包含空格的路径
+    const quotedSourceFiles = sourceFiles.map(file => `"${file}"`);
+    const command = `${iverilogPath} -o "${outputFile}" ${quotedSourceFiles.join(' ')}`;
     
     if (useTerminal) {
         // 使用集成终端执行命令
-        return new Promise<string>((resolve, reject) => {
-            const terminal = vscode.window.createTerminal('Iverilog Compilation');
-            terminal.show();
-            terminal.sendText(command);
-            
-            // 监听终端关闭事件来判断命令执行结果
-            const disposable = vscode.window.onDidCloseTerminal((closedTerminal) => {
-                if (closedTerminal === terminal) {
-                    disposable.dispose();
-                    // 检查输出文件是否成功生成
-                    if (fs.existsSync(outputFile)) {
-                        resolve('Compilation completed in terminal');
-                    } else {
-                        reject(new Error('Compilation failed - output file not found'));
-                    }
-                }
-            });
-        });
+        const terminal = vscode.window.createTerminal('Iverilog Compilation');
+        terminal.show();
+        
+        // 显示编译命令和源文件信息
+        terminal.sendText(`echo "Compiling Verilog files..."`);
+        terminal.sendText(`echo "Sources: ${sourceFiles.length} files"`);
+        terminal.sendText(`echo "Output: ${outputFile}"`);
+        terminal.sendText(command);
+        
+        // 返回成功消息，不等待终端关闭
+        return Promise.resolve('Compilation started in terminal');
     } else {
         // 原有的后台执行方式
         try {
