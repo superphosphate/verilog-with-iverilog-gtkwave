@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 Versions below are created in early development.
 
+## [v0.2.0] - 2025-08-20
+
+### Added
+
+- Support for execute commands in the integrated terminal
+
+### BREAKING CHANGES
+
+- vvp file preview is going to be removed in a possible future version
+
 ## [v0.1.2-beta2] - 2025-06-10
 
 ### Added
