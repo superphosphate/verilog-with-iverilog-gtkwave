@@ -178,7 +178,7 @@ This project is licensed under the LGPL v3.0 License. See the LICENSE file for m
 
 ### 安装方法
 
-#### 从源码安装
+#### 1. 从源码安装
 
 1. 克隆仓库：
    ```bash
@@ -207,14 +207,21 @@ This project is licensed under the LGPL v3.0 License. See the LICENSE file for m
 
 6. 按 `F5` 在新的扩展开发宿主窗口中运行扩展
 
-#### 打包安装
+#### 2. 从Github Releases安装
 
-1. 构建扩展包：
+1. 访问 [Github Releases页面](https://github.com/superphosphate/verilog-with-iverilog-gtkwave/releases)
+2. 下载最新的 `.vsix` 文件
+3. 在 VS Code 中安装下载的 `.vsix` 文件
+
+#### 3. 从npm安装
+
+1. 使用以下命令从npm下载源码：
+
    ```bash
-   npm run prepack
+   npm install -g verilog-with-iverilog-gtkwave
    ```
 
-2. 在 VS Code 中安装生成的 `.vsix` 文件
+2. 按照 [从源码安装](#1-从源码安装) 的步骤进行之后的安装步骤。
 
 ### 使用方法
 
@@ -245,20 +252,24 @@ This project is licensed under the LGPL v3.0 License. See the LICENSE file for m
 通过 VS Code 设置配置扩展（`文件 > 首选项 > 设置`）：
 
 #### 工具路径
+
 - `iverilog.path`：Iverilog 可执行文件路径（默认：`/usr/bin/iverilog`）
 - `gtkwave.path`：GTKWave 可执行文件路径（默认：`/usr/bin/gtkwave`）
 
 #### 输出设置
+
 - `iverilog.outputDirectory`：编译文件目录（留空则使用源文件目录）
   - 支持绝对路径：`C:\verilog_output` 或 `/home/user/verilog_output`
   - 支持相对路径：`./output`、`../build`、`output/debug`
   - 相对路径相对于工作区根目录（如果可用）或源文件目录解析
 
 #### 界面设置
+
 - `iverilog.language`：语言设置（`auto`、`en`、`zh-cn`）
 - `iverilog.useTerminal`：使用集成终端执行命令（默认：`true`）
 
 #### 配置示例
+
 ```json
 {
   "iverilog.path": "C:\\iverilog\\bin\\iverilog.exe",
@@ -276,6 +287,7 @@ This project is licensed under the LGPL v3.0 License. See the LICENSE file for m
 1. **"找不到命令"错误**：确保 `iverilog` 和 `gtkwave` 已安装并在 PATH 中
 2. **编译失败**：检查所有必需的 Verilog 文件是否在同一目录中
 3. **未生成 VCD 文件**：确保测试台包含 VCD 转储命令：
+
    ```verilog
    initial begin
        $dumpfile("wave.vcd");
@@ -291,6 +303,7 @@ This project is licensed under the LGPL v3.0 License. See the LICENSE file for m
 ### 贡献
 
 欢迎贡献！您可以：
+
 - 为新功能或错误修复提交拉取请求
 - 为错误或功能请求打开问题
 - 改进文档
