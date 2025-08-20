@@ -13,9 +13,10 @@ export async function simulateModule(): Promise<void> {
     
     const filePath = editor.document.uri.fsPath;
     
-    // 获取配置的输出目录
+    // 获取配置的输出目录和仿真等待时间
     const config = vscode.workspace.getConfiguration();
     const outputDirectory = config.get('iverilog.outputDirectory', '');
+    const simulationWaitTimeMs = config.get('iverilog.simulationWaitTime', 2000);
     
     // 确定 wave 文件路径
     let waveFile: string;

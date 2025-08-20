@@ -161,6 +161,14 @@
           "description": "Use integrated terminal to run all commands (iverilog, vvp, gtkwave). When enabled, all commands will be executed in VS Code's integrated terminal for better visibility and control.",
           "description.zh-cn": "使用集成终端运行所有命令（iverilog、vvp、gtkwave）。启用后，所有命令都将在 VS Code 的集成终端中执行，以获得更好的可见性和控制。"
         },
+        "iverilog.simulationWaitTime": {
+          "type": "number",
+          "default": 2000,
+          "minimum": 500,
+          "maximum": 10000,
+          "description": "Wait time in milliseconds before prompting to open GTKWave after simulation starts.",
+          "description.zh-cn": "仿真开始后等待多少毫秒再提示打开 GTKWave。"
+        },
         "vcd.viewer.defaultZoom": {
           "type": "number",
           "default": 1,
