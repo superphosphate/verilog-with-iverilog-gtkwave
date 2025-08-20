@@ -2,7 +2,7 @@
 
 ## English
 
-This project is a Visual Studio Code extension that allows users to easily compile Verilog modules using `iverilog` and visualize the simulation results with `gtkwave`. 
+This project is a Visual Studio Code extension that allows users to easily compile Verilog modules using `iverilog` and visualize the simulation results with `gtkwave`.
 
 [查看中文说明](#中文)
 
@@ -30,26 +30,31 @@ This project is a Visual Studio Code extension that allows users to easily compi
 #### From Source
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/superphosphate/verilog-with-iverilog-gtkwave.git
    ```
 
 2. Navigate to the project directory:
+
    ```bash
    cd vscode-iverilog-gtkwave
    ```
 
 3. Install dependencies:
+
    ```bash
    npm install
    ```
 
 4. Compile the extension:
+
    ```bash
    npm run compile
    ```
 
 5. Open the project in Visual Studio Code:
+
    ```bash
    code .
    ```
@@ -59,6 +64,7 @@ This project is a Visual Studio Code extension that allows users to easily compi
 #### Package Installation
 
 1. Build the extension package:
+
    ```bash
    npm run prepack
    ```
@@ -94,20 +100,24 @@ This project is a Visual Studio Code extension that allows users to easily compi
 Configure the extension through VS Code settings (`File > Preferences > Settings`):
 
 #### Tool Paths
+
 - `iverilog.path`: Path to the Iverilog executable (default: `/usr/bin/iverilog`)
 - `gtkwave.path`: Path to the GTKWave executable (default: `/usr/bin/gtkwave`)
 
 #### Output Settings
+
 - `iverilog.outputDirectory`: Directory for compiled files (leave empty to use source directory)
   - Supports absolute paths: `C:\verilog_output` or `/home/user/verilog_output`
   - Supports relative paths: `./output`, `../build`, `output/debug`
   - Relative paths are resolved relative to workspace root (if available) or source file directory
 
 #### Interface Settings
+
 - `iverilog.language`: Language setting (`auto`, `en`, `zh-cn`)
 - `iverilog.useTerminal`: Use integrated terminal for commands (default: `true`)
 
 #### Example Configuration
+
 ```json
 {
   "iverilog.path": "C:\\iverilog\\bin\\iverilog.exe",
@@ -125,6 +135,7 @@ Configure the extension through VS Code settings (`File > Preferences > Settings
 1. **"Command not found" errors**: Ensure `iverilog` and `gtkwave` are installed and in your PATH
 2. **Compilation fails**: Check that all required Verilog files are in the same directory
 3. **No VCD file generated**: Ensure your testbench includes VCD dump commands:
+
    ```verilog
    initial begin
        $dumpfile("wave.vcd");
@@ -140,6 +151,7 @@ Configure the extension through VS Code settings (`File > Preferences > Settings
 ### Contributing
 
 Contributions are welcome! Please feel free to:
+
 - Submit pull requests for new features or bug fixes
 - Open issues for bugs or feature requests
 - Improve documentation
@@ -155,7 +167,7 @@ This project is licensed under the LGPL v3.0 License. See the LICENSE file for m
 
 这是一个 Visual Studio Code 扩展项目，让用户能够轻松使用 `iverilog` 编译 Verilog 模块，并使用 `gtkwave` 可视化仿真结果。
 
-[View README in English ](#english)
+[View README in English](#english)
 
 ### 功能特性
 
@@ -181,26 +193,31 @@ This project is licensed under the LGPL v3.0 License. See the LICENSE file for m
 #### 1. 从源码安装
 
 1. 克隆仓库：
+
    ```bash
    git clone https://github.com/superphosphate/verilog-with-iverilog-gtkwave.git
    ```
 
 2. 进入项目目录：
+
    ```bash
    cd vscode-with-iverilog-gtkwave
    ```
 
 3. 安装依赖：
+
    ```bash
    npm install
    ```
 
 4. 编译扩展：
+
    ```bash
    npm run compile
    ```
 
 5. 在 Visual Studio Code 中打开项目：
+
    ```bash
    code .
    ```
