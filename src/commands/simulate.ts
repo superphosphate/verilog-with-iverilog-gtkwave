@@ -68,7 +68,7 @@ export async function simulateModule(): Promise<void> {
             if (result === 'OK') {
                 await openVcdFile(waveDirectory);
             }
-        }, 2000); // 等待2秒
+        }, simulationWaitTimeMs); // 等待指定时间
     } catch (error: any) {
         vscode.window.showErrorMessage(localize('simulation_failed', error.message));
     }
