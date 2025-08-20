@@ -24,7 +24,7 @@ export async function compileModule(): Promise<void> {
         // 获取配置的输出目录和终端使用设置
         const config = vscode.workspace.getConfiguration();
         const outputDirectory = config.get('iverilog.outputDirectory', '');
-        config.get('iverilog.useTerminal', false);
+        const useTerminal = config.get('iverilog.useTerminal', true);
         // 确定输出文件路径 - 使用固定名称 "wave"
         let outputDirectory_final: string;
         if (outputDirectory) {
@@ -51,15 +51,8 @@ export async function compileModule(): Promise<void> {
         
         const outputFile = path.join(outputDirectory_final, 'wave');
         
-        // 使用后台编译
-        await vscode.window.withProgress({
-            location: vscode.ProgressLocation.Notification,
-            title: localize('compiling_module'),
-            cancellable: false
-        }, async () => {
-            // 编译目录下所有 Verilog 文件
-            await runIverilog(filePath, outputFile, true, false);
-        });
+        // 始终使用集成终端进行编译
+        await runIverilog(filePath, outputFile, true, true);
         vscode.window.showInformationMessage(localize('compilation_succeeded', 'wave'));
     } catch (error: any) {
         vscode.window.showErrorMessage(localize('compilation_failed', error.message));

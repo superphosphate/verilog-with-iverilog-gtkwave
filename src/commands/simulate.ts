@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
-import { execSync } from 'child_process';
 import { openGtkwave } from '../utils/gtkwave';
 import { localize } from '../i18n/i18n';
 
@@ -17,7 +16,6 @@ export async function simulateModule(): Promise<void> {
     // 获取配置的输出目录
     const config = vscode.workspace.getConfiguration();
     const outputDirectory = config.get('iverilog.outputDirectory', '');
-    const useTerminal = config.get('iverilog.useTerminal', false);
     
     // 确定 wave 文件路径
     let waveFile: string;
@@ -49,43 +47,28 @@ export async function simulateModule(): Promise<void> {
     }
     
     try {
-        if (useTerminal) {
-            // 使用集成终端执行 vvp 命令
-            const terminal = vscode.window.createTerminal('VVP Simulation');
-            terminal.show();
-            terminal.sendText(`cd "${waveDirectory}"`);
-            terminal.sendText(`vvp -n wave -lxt2`);
-            
-            // 等待用户手动检查 VCD 文件生成
+        // 始终使用集成终端执行 vvp 命令
+        const terminal = vscode.window.createTerminal('VVP Simulation');
+        terminal.show();
+        
+        // 显示命令信息
+        terminal.sendText(`echo "Simulating Verilog design..."`);
+        terminal.sendText(`echo "Working directory: ${waveDirectory}"`);
+        terminal.sendText(`echo "Executable: wave"`);
+        terminal.sendText(`cd "${waveDirectory}"`);
+        terminal.sendText(`vvp -n "${waveFile}" -lxt2`);
+        
+        // 自动等待一段时间后提示用户
+        setTimeout(async () => {
             const result = await vscode.window.showInformationMessage(
-                localize('check_vcd_generated', 'Please check if VCD file is generated, then click OK to open GTKWave'),
+                localize('check_vcd_generated', 'Simulation command has been executed. Check the terminal output and click OK to open GTKWave if VCD file is generated.'),
                 'OK', 'Cancel'
             );
             
             if (result === 'OK') {
                 await openVcdFile(waveDirectory);
             }
-        } else {
-            // 原有的后台执行方式
-            await vscode.window.withProgress({
-                location: vscode.ProgressLocation.Notification,
-                title: localize('generating_wave'),
-                cancellable: false
-            }, async () => {
-                await vscode.workspace.saveAll();
-                await new Promise<void>((resolve, reject) => {
-                    try {
-                        // 运行 vvp -n wave -lxt2 命令
-                        execSync(`vvp -n ${waveFile} -lxt2`, { cwd: waveDirectory });
-                        resolve();
-                    } catch (error) {
-                        reject(`${error}`);
-                    }
-                });
-            });
-            
-            await openVcdFile(waveDirectory);
-        }
+        }, 2000); // 等待2秒
     } catch (error: any) {
         vscode.window.showErrorMessage(localize('simulation_failed', error.message));
     }

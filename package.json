@@ -2,7 +2,7 @@
   "name": "verilog-with-iverilog-gtkwave",
   "displayName": "Verilog with Iverilog and GTKWave",
   "description": "A Visual Studio Code extension for compiling Verilog modules with Iverilog and simulating results with GTKWave.",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "publisher": "SuperPhosphate",
   "icon": "image/icon.png",
   "engines": {
@@ -158,8 +158,8 @@
         "iverilog.useTerminal": {
           "type": "boolean",
           "default": true,
-          "description": "Use integrated terminal to run iverilog and vvp commands.",
-          "description.zh-cn": "使用集成终端运行 iverilog 和 vvp 命令。"
+          "description": "Use integrated terminal to run all commands (iverilog, vvp, gtkwave). When enabled, all commands will be executed in VS Code's integrated terminal for better visibility and control.",
+          "description.zh-cn": "使用集成终端运行所有命令（iverilog、vvp、gtkwave）。启用后，所有命令都将在 VS Code 的集成终端中执行，以获得更好的可见性和控制。"
         },
         "vcd.viewer.defaultZoom": {
           "type": "number",
