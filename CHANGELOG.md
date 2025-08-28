@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 Versions below are created in early development.
 
+## [v0.2.1] - 2025-08-28
+
+### Changed
+
+- Enhanced integrated terminal performance with more informative and prominent compilation messages
+
 ## [v0.2.0] - 2025-08-20
 
 ### Added
