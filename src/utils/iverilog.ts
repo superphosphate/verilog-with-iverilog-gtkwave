@@ -75,14 +75,22 @@ export async function runIverilog(mainFile: string, outputFile: string, compileA
     const command = `${iverilogPath} -o "${outputFile}" ${quotedSourceFiles.join(' ')}`;
     
     if (useTerminal) {
-        // 使用集成终端执行命令
-        const terminal = vscode.window.createTerminal('Iverilog Compilation');
+      
+        // 使用集成终端执行命令，并在创建时显示高亮的编译信息
+        const coloredMessage = '\x1b[36m=== Verilog Compilation Started ===\x1b[0m\r\n' +
+                              '\x1b[32m Sources: ' + sourceFiles.length + ' files\x1b[0m\r\n' +
+                              '\x1b[33m Output: ' + outputFile + '\x1b[0m\r\n' +
+                              '\x1b[35m Command: \x1b[0m' + command + '\r\n' +
+                              '\x1b[36m=====================================\x1b[0m\r\n';
+        
+        const terminal = vscode.window.createTerminal({
+            name: 'Iverilog Compilation',
+            message: coloredMessage
+        });
         terminal.show();
         
-        // 显示编译命令和源文件信息
-        terminal.sendText(`echo "Compiling Verilog files..."`);
-        terminal.sendText(`echo "Sources: ${sourceFiles.length} files"`);
-        terminal.sendText(`echo "Output: ${outputFile}"`);
+        // 执行编译命令
+
         terminal.sendText(command);
         
         // 返回成功消息，不等待终端关闭
