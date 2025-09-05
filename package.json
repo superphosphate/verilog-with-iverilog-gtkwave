@@ -2,9 +2,7 @@
   "name": "verilog-with-iverilog-gtkwave",
   "displayName": "Verilog with Iverilog and GTKWave",
   "description": "A Visual Studio Code extension for compiling Verilog modules with Iverilog and simulating results with GTKWave.",
-
   "version": "0.2.1",
-
   "publisher": "SuperPhosphate",
   "icon": "image/icon.png",
   "engines": {
