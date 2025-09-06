@@ -12,6 +12,9 @@ This project is a Visual Studio Code extension that allows users to easily compi
 
 - **One-click compilation**: Compile Verilog modules directly from the editor title bar
 - **Directory-wide compilation**: Automatically compiles all Verilog files in the same directory
+- **Verilog File Manager**: Left sidebar tree view to manage which files are included in compilation
+- **Selective compilation**: Choose which Verilog files to include or exclude from compilation
+- **Testbench detection**: Automatically identifies and marks testbench files based on file naming conventions
 - **Customizable output directory**: Configure where compiled files are stored
 - **Integrated simulation**: Launch `gtkwave` automatically to display simulation results
 - **Flexible tool paths**: Configure custom paths for `iverilog` and `gtkwave`
@@ -27,7 +30,7 @@ This project is a Visual Studio Code extension that allows users to easily compi
 
 ### Installation
 
-#### From Source
+#### 1. From Source
 
 1. Clone the repository:
 
@@ -61,23 +64,45 @@ This project is a Visual Studio Code extension that allows users to easily compi
 
 6. Press `F5` to run the extension in a new Extension Development Host window
 
-#### Package Installation
+#### 2. From Github Releases
 
-1. Build the extension package:
+1. Go to the [Github Releases page](https://github.com/superphosphate/verilog-with-iverilog-gtkwave/releases)
+2. Download the latest `.vsix` file
+3. Install the downloaded `.vsix` file in VS Code
+
+#### 3. From NPM Repository
+
+1. Download the source code from npm using the following command:
 
    ```bash
-   npm run prepack
+   npm i -D verilog-with-iverilog-gtkwave
    ```
 
-2. Install the generated `.vsix` file in VS Code
+2. Follow the installation steps from [From Source](#1-from-source).
 
 ### Usage
+
+#### Verilog File Manager
+
+The extension adds a "Verilog Files" tree view to the Explorer sidebar that shows all Verilog files in your workspace:
+
+- **Green checkmark** (✅): File is enabled for compilation
+- **Red X** (❌): File is disabled from compilation
+- **"(testbench)" label**: Automatically detected testbench files
+- **Click on file name**: Opens the file in the editor
+- **Right-click menu**: Toggle compilation status
+
+**Tree View Controls:**
+
+- **Refresh button**: Rescan workspace for Verilog files
+- **Enable All button**: Enable all files for compilation
+- **Disable All button**: Disable all files from compilation
 
 #### Using Editor Title Bar Buttons
 
 1. Open a Verilog file (`.v` or `.vh`) in VS Code
 2. You'll see two buttons in the editor title bar:
-   - **Compile button** (▶️): Compiles the current module and all Verilog files in the directory
+   - **Compile button** (▶️): Compiles the current module using enabled files from the tree view
    - **Simulate button** (🐛): Runs the simulation and opens GTKWave
 
 #### Using Command Palette
@@ -91,9 +116,10 @@ This project is a Visual Studio Code extension that allows users to easily compi
 #### Workflow
 
 1. **Write your Verilog code**: Create your modules and testbenches
-2. **Compile**: Click the compile button or use the command palette
-3. **Simulate**: Click the simulate button to run the testbench
-4. **View waveforms**: GTKWave will open automatically with the generated VCD file
+2. **Manage files**: Use the tree view to enable/disable files for compilation
+3. **Compile**: Click the compile button or use the command palette
+4. **Simulate**: Click the simulate button to run the testbench
+5. **View waveforms**: GTKWave will open automatically with the generated VCD file
 
 ### Configuration
 
@@ -115,6 +141,7 @@ Configure the extension through VS Code settings (`File > Preferences > Settings
 
 - `iverilog.language`: Language setting (`auto`, `en`, `zh-cn`)
 - `iverilog.useTerminal`: Use integrated terminal for commands (default: `true`)
+- `iverilog.useTreeView`: Use tree view to manage compilation files (default: `true`)
 
 #### Example Configuration
 
@@ -124,7 +151,8 @@ Configure the extension through VS Code settings (`File > Preferences > Settings
   "gtkwave.path": "C:\\gtkwave\\bin\\gtkwave.exe",
   "iverilog.outputDirectory": "./build/verilog",
   "iverilog.language": "en",
-  "iverilog.useTerminal": true
+  "iverilog.useTerminal": true,
+  "iverilog.useTreeView": true
 }
 ```
 
@@ -176,6 +204,9 @@ This project is licensed under the LGPL v3.0 License. See the LICENSE file for m
 - **一键编译**：直接从编辑器标题栏编译 Verilog 模块
 - **目录级编译**：自动编译同一目录下的所有 Verilog 文件
 - **自定义输出目录**：配置编译文件的存储位置
+- **Verilog 文件管理器**：位于左侧边栏树视图，用于管理在编译中包含哪些文件
+- **选择性编译**：选择要包含或排除在编译中的 Verilog 文件
+- **测试平台检测**：基于文件名，自动识别并标记测试平台文件
 - **集成仿真**：自动启动 `gtkwave` 显示仿真结果
 - **灵活的工具路径**：为 `iverilog` 和 `gtkwave` 配置自定义路径
 - **终端集成**：可选择在 VS Code 集成终端中运行命令
@@ -242,6 +273,22 @@ This project is licensed under the LGPL v3.0 License. See the LICENSE file for m
 
 ### 使用方法
 
+#### Verilog 文件管理器
+
+该扩展在资源管理器侧边栏中添加了一个“Verilog Files”视图，显示工作区中的所有 Verilog 文件：
+
+- **√**: 文件已启用编译
+- **X**: 文件已禁用编译
+- **"(testbench)" 标签**: 自动检测到的测试平台文件
+- **单击文件名**: 在编辑器中打开文件
+- **右键菜单**: 切换编译状态
+
+**视图控件:**
+
+- **刷新按钮**: 重新扫描工作区中的 Verilog 文件
+- **启用所有按钮**: 启用所有文件进行编译
+- **禁用所有按钮**: 禁用所有文件的编译
+
 #### 使用编辑器标题栏按钮
 
 1. 在 VS Code 中打开 Verilog 文件（`.v` 或 `.vh`）
@@ -260,9 +307,10 @@ This project is licensed under the LGPL v3.0 License. See the LICENSE file for m
 #### 工作流程
 
 1. **编写 Verilog 代码**：创建您的模块和测试台
-2. **编译**：点击编译按钮或使用命令面板
-3. **仿真**：点击仿真按钮运行测试台
-4. **查看波形**：GTKWave 将自动打开生成的 VCD 文件
+2. **管理文件**：使用树视图启用/禁用要编译的文件
+3. **编译**：点击编译按钮或使用命令面板
+4. **仿真**：点击仿真按钮运行测试台
+5. **查看波形**：GTKWave 将自动打开生成的 VCD 文件
 
 ### 配置设置
 

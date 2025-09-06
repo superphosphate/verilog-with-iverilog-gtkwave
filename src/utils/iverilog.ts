@@ -33,14 +33,28 @@ async function getAllVerilogFiles(directory: string): Promise<string[]> {
     }
 }
 
-export async function runIverilog(mainFile: string, outputFile: string, compileAllInDirectory: boolean = true, useTerminal: boolean = true): Promise<string> {
+export async function runIverilog(
+    mainFile: string, 
+    outputFile: string, 
+    compileAllInDirectory: boolean = true, 
+    useTerminal: boolean = true,
+    customSourceFiles?: string[]
+): Promise<string> {
     const config = vscode.workspace.getConfiguration();
     const iverilogPath = config.get('iverilog.path', 'iverilog');
     
     let sourceFiles: string[] = [path.normalize(mainFile)];
     
+    // 如果提供了自定义源文件列表，使用它
+    if (customSourceFiles && customSourceFiles.length > 0) {
+        sourceFiles = customSourceFiles.map(file => path.normalize(file));
+        // 确保主文件在列表中且在最后
+        const normalizedMainFile = path.normalize(mainFile);
+        sourceFiles = sourceFiles.filter(file => file !== normalizedMainFile);
+        sourceFiles.push(normalizedMainFile);
+    }
     // 如果启用了编译目录下所有文件
-    if (compileAllInDirectory) {
+    else if (compileAllInDirectory) {
         const directory = path.dirname(mainFile);
         const allFiles = await getAllVerilogFiles(directory);
         

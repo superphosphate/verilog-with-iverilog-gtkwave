@@ -31,7 +31,15 @@ export const locales: Locales = {
         
         // GTKWave 相关
         'error_gtkwave': 'Error opening GTKWave: {0}',
-        'check_vcd_generated': 'Please check if VCD file is generated, then click OK to open GTKWave'
+        'check_vcd_generated': 'Please check if VCD file is generated, then click OK to open GTKWave',
+        
+        // 树形视图相关
+        'verilog_files': 'Verilog Files',
+        'enable_file': 'Enable file for compilation',
+        'disable_file': 'Disable file from compilation',
+        'file_enabled': 'File enabled for compilation',
+        'file_disabled': 'File disabled from compilation',
+        'compilation_with_selected': 'Compiling with {0} selected files'
     },
     'zh-cn': {
         // 通用
@@ -57,6 +65,14 @@ export const locales: Locales = {
         
         // GTKWave 相关
         'error_gtkwave': '打开 GTKWave 时出错: {0}',
-        'check_vcd_generated': '请检查 VCD 文件是否已生成，然后点击确定打开 GTKWave'
+        'check_vcd_generated': '请检查 VCD 文件是否已生成，然后点击确定打开 GTKWave',
+        
+        // 树形视图相关
+        'verilog_files': 'Verilog 文件',
+        'enable_file': '启用文件进行编译',
+        'disable_file': '禁用文件编译',
+        'file_enabled': '文件已启用编译',
+        'file_disabled': '文件已禁用编译',
+        'compilation_with_selected': '正在使用 {0} 个选中文件进行编译'
     }
 };

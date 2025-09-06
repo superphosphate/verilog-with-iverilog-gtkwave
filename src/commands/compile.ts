@@ -3,8 +3,9 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { runIverilog } from '../utils/iverilog';
 import { localize } from '../i18n/i18n';
+import { VerilogTreeDataProvider } from '../verilogTreeView';
 
-export async function compileModule(): Promise<void> {
+export async function compileModule(treeProvider?: VerilogTreeDataProvider): Promise<void> {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
         vscode.window.showErrorMessage(localize('no_active_editor'));
@@ -25,6 +26,7 @@ export async function compileModule(): Promise<void> {
         const config = vscode.workspace.getConfiguration();
         const outputDirectory = config.get('iverilog.outputDirectory', '');
         const useTerminal = config.get('iverilog.useTerminal', true);
+        const useTreeView = config.get('iverilog.useTreeView', true);
         // 确定输出文件路径 - 使用固定名称 "wave"
         let outputDirectory_final: string;
         if (outputDirectory) {
@@ -51,8 +53,32 @@ export async function compileModule(): Promise<void> {
         
         const outputFile = path.join(outputDirectory_final, 'wave');
         
-        // 始终使用集成终端进行编译
-        await runIverilog(filePath, outputFile, true, true);
+        // 获取要编译的文件列表
+        let sourceFiles: string[] = [filePath];
+        let useCustomFiles = false;
+        
+        if (treeProvider && useTreeView) {
+            // 如果提供了树形视图提供者且启用了树形视图，使用其中启用的文件
+            const enabledFiles = treeProvider.getEnabledFiles();
+            if (enabledFiles.length > 0) {
+                sourceFiles = enabledFiles;
+                // 确保当前文件在列表中
+                if (!sourceFiles.includes(filePath)) {
+                    sourceFiles.push(filePath);
+                }
+                useCustomFiles = true;
+                vscode.window.showInformationMessage(
+                    localize('compilation_with_selected', sourceFiles.length.toString())
+                );
+            }
+        }
+        
+        // 使用自定义文件列表进行编译或回退到目录模式
+        if (useCustomFiles) {
+            await runIverilog(filePath, outputFile, false, true, sourceFiles);
+        } else {
+            await runIverilog(filePath, outputFile, true, true);
+        }
         vscode.window.showInformationMessage(localize('compilation_succeeded', 'wave'));
     } catch (error: any) {
         vscode.window.showErrorMessage(localize('compilation_failed', error.message));

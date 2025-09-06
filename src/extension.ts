@@ -4,6 +4,7 @@ import { simulateModule } from './commands/simulate';
 import { I18n } from './i18n/i18n';
 import { VCDEditorProvider } from './vcd/provider';
 import { VCDPreviewProvider } from './vcdPreview';
+import { VerilogTreeDataProvider, VerilogFileItem } from './verilogTreeView';
 
 export function activate(context: vscode.ExtensionContext) {
     // 初始化国际化设置
@@ -18,15 +19,41 @@ export function activate(context: vscode.ExtensionContext) {
         })
     );
 
-    // 注册编译和模拟命令
-    let compileCommand = vscode.commands.registerCommand('vscode-iverilog-gtkwave.compile', compileModule);
+    // 创建Verilog文件树视图
+    const verilogTreeProvider = new VerilogTreeDataProvider(context);
+    const treeView = vscode.window.createTreeView('verilogTreeView', {
+        treeDataProvider: verilogTreeProvider,
+        showCollapseAll: false
+    });
+    context.subscriptions.push(treeView);
+
+    // 注册编译和模拟命令，传入树视图提供者
+    let compileCommand = vscode.commands.registerCommand('vscode-iverilog-gtkwave.compile', 
+        () => compileModule(verilogTreeProvider));
     let simulateCommand = vscode.commands.registerCommand('vscode-iverilog-gtkwave.simulate', simulateModule);
+
+    // 注册树视图相关命令
+    const refreshCommand = vscode.commands.registerCommand('verilogTreeView.refresh', 
+        () => verilogTreeProvider.refresh());
+    
+    const toggleFileCommand = vscode.commands.registerCommand('verilogTreeView.toggleFile', 
+        (item: VerilogFileItem) => verilogTreeProvider.toggleFileEnabled(item.filePath));
+    
+    const enableAllCommand = vscode.commands.registerCommand('verilogTreeView.enableAll',
+        () => verilogTreeProvider.enableAllFiles());
+    
+    const disableAllCommand = vscode.commands.registerCommand('verilogTreeView.disableAll',
+        () => verilogTreeProvider.disableAllFiles());
 
     // 注册VCD查看器
     const vcdProvider = VCDEditorProvider.register(context);
 
     context.subscriptions.push(compileCommand);
     context.subscriptions.push(simulateCommand);
+    context.subscriptions.push(refreshCommand);
+    context.subscriptions.push(toggleFileCommand);
+    context.subscriptions.push(enableAllCommand);
+    context.subscriptions.push(disableAllCommand);
     context.subscriptions.push(vcdProvider);
 
     // 注册VCD/VVP文件预览命令
