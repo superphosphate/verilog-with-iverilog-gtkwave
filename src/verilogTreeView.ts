@@ -20,7 +20,7 @@ export class VerilogTreeItem extends vscode.TreeItem {
         this.description = fileItem.isTestbench ? '(testbench)' : '';
         this.resourceUri = vscode.Uri.file(fileItem.filePath);
         
-        // 设置图标和上下文值
+        // set icon and context value based on enabled state
         if (fileItem.isEnabled) {
             this.iconPath = new vscode.ThemeIcon('check', new vscode.ThemeColor('testing.iconPassed'));
             this.contextValue = 'verilogFile.enabled';
@@ -29,12 +29,11 @@ export class VerilogTreeItem extends vscode.TreeItem {
             this.contextValue = 'verilogFile.disabled';
         }
         
-        // 添加testbench标识
+        // add suffix for testbench files
         if (fileItem.isTestbench) {
             this.contextValue += '.testbench';
         }
         
-        // 点击时打开文件
         this.command = {
             command: 'vscode.open',
             title: 'Open',
@@ -60,7 +59,7 @@ export class VerilogTreeDataProvider implements vscode.TreeDataProvider<VerilogF
         this.loadFileStates();
         this.refresh();
         
-        // 监听文件系统变化
+        // listen for file changes to refresh the tree view
         const watcher = vscode.workspace.createFileSystemWatcher('**/*.{v,vh}');
         watcher.onDidCreate(() => this.refresh());
         watcher.onDidDelete(() => this.refresh());
@@ -94,7 +93,7 @@ export class VerilogTreeDataProvider implements vscode.TreeDataProvider<VerilogF
             const files = await vscode.workspace.findFiles(
                 new vscode.RelativePattern(workspaceFolder, '**/*.{v,vh}'),
                 null,
-                100 // 限制最大文件数量
+                100 // limit to 100 files
             );
 
             for (const file of files) {
@@ -110,7 +109,7 @@ export class VerilogTreeDataProvider implements vscode.TreeDataProvider<VerilogF
             }
         }
 
-        // 按文件名排序
+        // sort files alphabetically
         this.verilogFiles.sort((a, b) => {
             const nameA = path.basename(a.filePath);
             const nameB = path.basename(b.filePath);
@@ -121,7 +120,7 @@ export class VerilogTreeDataProvider implements vscode.TreeDataProvider<VerilogF
     private async isTestbenchFile(filePath: string): Promise<boolean> {
         try {
             const content = await fs.promises.readFile(filePath, 'utf8');
-            // 简单的testbench检测：包含特定关键字
+            // simple heuristics to identify testbench files
             const testbenchKeywords = [
                 'initial',
                 '$finish',
@@ -136,12 +135,10 @@ export class VerilogTreeDataProvider implements vscode.TreeDataProvider<VerilogF
             const lowerContent = content.toLowerCase();
             const fileName = path.basename(filePath).toLowerCase();
             
-            // 检查文件名是否包含testbench标识
             if (fileName.includes('_tb') || fileName.includes('_test') || fileName.includes('testbench')) {
                 return true;
             }
             
-            // 检查文件内容
             return testbenchKeywords.some(keyword => lowerContent.includes(keyword));
         } catch (error) {
             return false;
@@ -153,13 +150,13 @@ export class VerilogTreeDataProvider implements vscode.TreeDataProvider<VerilogF
         this.fileStates.set(filePath, !currentState);
         this.saveFileStates();
         
-        // 更新对应的文件项
+        // update the item in verilogFiles array
         const fileItem = this.verilogFiles.find(item => item.filePath === filePath);
         if (fileItem) {
             fileItem.isEnabled = !currentState;
         }
         
-        // 显示状态消息
+        // show info message
         const fileName = path.basename(filePath);
         if (!currentState) {
             vscode.window.showInformationMessage(localize('file_enabled') + `: ${fileName}`);

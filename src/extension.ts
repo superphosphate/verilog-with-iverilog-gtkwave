@@ -7,10 +7,9 @@ import { VCDPreviewProvider } from './vcdPreview';
 import { VerilogTreeDataProvider, VerilogFileItem } from './verilogTreeView';
 
 export function activate(context: vscode.ExtensionContext) {
-    // 初始化国际化设置
+
     I18n.getInstance();
 
-    // 监听设置变化，更新语言
     context.subscriptions.push(
         vscode.workspace.onDidChangeConfiguration(e => {
             if (e.affectsConfiguration('iverilog.language')) {
@@ -19,7 +18,7 @@ export function activate(context: vscode.ExtensionContext) {
         })
     );
 
-    // 创建Verilog文件树视图
+    // create the tree view provider
     const verilogTreeProvider = new VerilogTreeDataProvider(context);
     const treeView = vscode.window.createTreeView('verilogTreeView', {
         treeDataProvider: verilogTreeProvider,
@@ -27,12 +26,12 @@ export function activate(context: vscode.ExtensionContext) {
     });
     context.subscriptions.push(treeView);
 
-    // 注册编译和模拟命令，传入树视图提供者
+    // register compile and simulate commands
     let compileCommand = vscode.commands.registerCommand('vscode-iverilog-gtkwave.compile', 
         () => compileModule(verilogTreeProvider));
     let simulateCommand = vscode.commands.registerCommand('vscode-iverilog-gtkwave.simulate', simulateModule);
 
-    // 注册树视图相关命令
+    // register tree view commands
     const refreshCommand = vscode.commands.registerCommand('verilogTreeView.refresh', 
         () => verilogTreeProvider.refresh());
     
@@ -45,7 +44,7 @@ export function activate(context: vscode.ExtensionContext) {
     const disableAllCommand = vscode.commands.registerCommand('verilogTreeView.disableAll',
         () => verilogTreeProvider.disableAllFiles());
 
-    // 注册VCD查看器
+    // register VCD editor provider
     const vcdProvider = VCDEditorProvider.register(context);
 
     context.subscriptions.push(compileCommand);
@@ -56,7 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(disableAllCommand);
     context.subscriptions.push(vcdProvider);
 
-    // 注册VCD/VVP文件预览命令
+    // register VCD preview command
     const previewCommand = vscode.commands.registerCommand('vcd.preview', () => {
         const activeEditor = vscode.window.activeTextEditor;
         if (activeEditor) {
@@ -66,7 +65,7 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
     
-    // 注册文件关联的右键菜单
+    // register context menu command for VCD files
     const contextCommand = vscode.commands.registerCommand('vcd.previewFile', (uri: vscode.Uri) => {
         vscode.workspace.openTextDocument(uri).then(document => {
             VCDPreviewProvider.createOrShow(context.extensionPath, document);
@@ -74,15 +73,8 @@ export function activate(context: vscode.ExtensionContext) {
     });
     
     context.subscriptions.push(previewCommand, contextCommand);
-    
-    // 注册Hello World命令
-    const helloWorldCommand = vscode.commands.registerCommand('verilog-with-iverilog-gtkwave.helloWorld', () => {
-        vscode.window.showInformationMessage('Hello World from verilog-with-iverilog-gtkwave!');
-    });
-    
-    context.subscriptions.push(helloWorldCommand);
 
-    // 注册扩展激活逻辑
+    // register extension activation logic
     console.log('Extension "vscode-iverilog-gtkwave" is now active.');
 }
 
