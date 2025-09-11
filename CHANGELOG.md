@@ -42,4 +42,5 @@ Versions below are created in early development.
 1. Added
     - First version release
     - Basic support for Iverilog and GTKwave
+
     - Initial Verilog compilation features
