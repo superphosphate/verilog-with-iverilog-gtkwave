@@ -106,6 +106,8 @@ export class WaveformViewer {
         });
         
         this.canvas.tabIndex = 0; // 使画布可获得焦点以接收键盘事件
+        this.canvas.setAttribute('role', 'application');
+        this.canvas.setAttribute('aria-label', 'Waveform viewer canvas');
     }
     
     private updateCursor(e: MouseEvent): void {

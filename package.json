@@ -2,7 +2,7 @@
   "name": "verilog-with-iverilog-gtkwave",
   "displayName": "Verilog with Iverilog and GTKWave",
   "description": "A Visual Studio Code extension for compiling Verilog modules with Iverilog and simulating results with GTKWave.",
-  "version": "0.1.2",
+  "version": "0.3.0",
   "publisher": "SuperPhosphate",
   "icon": "image/icon.png",
   "engines": {
@@ -53,9 +53,67 @@
       {
         "command": "verilog-with-iverilog-gtkwave.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "verilogTreeView.refresh",
+        "title": "Refresh",
+        "title.zh-cn": "刷新",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "verilogTreeView.toggleFile",
+        "title": "Toggle Compilation",
+        "title.zh-cn": "切换编译状态"
+      },
+      {
+        "command": "verilogTreeView.enableAll",
+        "title": "Enable All Files",
+        "title.zh-cn": "启用所有文件",
+        "icon": "$(check-all)"
+      },
+      {
+        "command": "verilogTreeView.disableAll",
+        "title": "Disable All Files",
+        "title.zh-cn": "禁用所有文件",
+        "icon": "$(close-all)"
       }
     ],
+    "views": {
+      "explorer": [
+        {
+          "id": "verilogTreeView",
+          "name": "Verilog Files",
+          "name.zh-cn": "Verilog 文件",
+          "when": "workspaceFolderCount > 0",
+          "icon": "$(file-code)"
+        }
+      ]
+    },
     "menus": {
+      "view/title": [
+        {
+          "command": "verilogTreeView.refresh",
+          "when": "view == verilogTreeView",
+          "group": "navigation"
+        },
+        {
+          "command": "verilogTreeView.enableAll",
+          "when": "view == verilogTreeView",
+          "group": "navigation"
+        },
+        {
+          "command": "verilogTreeView.disableAll",
+          "when": "view == verilogTreeView",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "verilogTreeView.toggleFile",
+          "when": "view == verilogTreeView",
+          "group": "inline"
+        }
+      ],
       "editor/title": [
         {
           "when": "resourceLangId == verilog || resourceExtname == .v || resourceExtname == .vh",
@@ -158,8 +216,16 @@
         "iverilog.useTerminal": {
           "type": "boolean",
           "default": true,
-          "description": "Use integrated terminal to run iverilog and vvp commands.",
-          "description.zh-cn": "使用集成终端运行 iverilog 和 vvp 命令。"
+          "description": "Use integrated terminal to run all commands (iverilog, vvp, gtkwave). When enabled, all commands will be executed in VS Code's integrated terminal for better visibility and control.",
+          "description.zh-cn": "使用集成终端运行所有命令（iverilog、vvp、gtkwave）。启用后，所有命令都将在 VS Code 的集成终端中执行，以获得更好的可见性和控制。"
+        },
+        "iverilog.simulationWaitTime": {
+          "type": "number",
+          "default": 2000,
+          "minimum": 500,
+          "maximum": 10000,
+          "description": "Wait time in milliseconds before prompting to open GTKWave after simulation starts.",
+          "description.zh-cn": "仿真开始后等待多少毫秒再提示打开 GTKWave。"
         },
         "vcd.viewer.defaultZoom": {
           "type": "number",
@@ -172,6 +238,12 @@
           "default": 50,
           "description": "Maximum number of signals to display simultaneously.",
           "description.zh-cn": "同时显示的最大信号数量。"
+        },
+        "iverilog.useTreeView": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use Verilog Tree View to manage compilation files. When enabled, only files marked as enabled in the tree view will be compiled.",
+          "description.zh-cn": "使用 Verilog 树形视图管理编译文件。启用后，只有在树形视图中标记为启用的文件才会被编译。"
         }
       }
     }
