@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 Versions below are created in early development.
 
+## [v0.3.0] - 2025-09-11
+
+1. Added
+    - Verilog file manager with selective compilation and tree view
+    - Ability to enable/disable specific Verilog files for compilation
+    - Automatic detection of testbench files
+
 ## [v0.2.1] - 2025-08-28
 
 1. Changed
