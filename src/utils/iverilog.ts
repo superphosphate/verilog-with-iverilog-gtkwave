@@ -72,6 +72,7 @@ export async function runIverilog(
     const command = `${iverilogPath} -o "${outputFile}" ${quotedSourceFiles.join(' ')}`;
     
     if (useTerminal) {
+
         // 使用集成终端执行命令，并在创建时显示高亮的编译信息
         const coloredMessage = `\x1b[36m=== Verilog Compilation Started ===\x1b[0m\r\n` +
                               `\x1b[32m Sources: ${sourceFiles.length} files\x1b[0m\r\n` +
